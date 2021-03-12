@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacman</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background: black;
+        }
+        #world{
+            margin-top: 8px;
+        }
+        div.row div{
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-top: -4px !important;
+        }
+        div.brick{
+            background-color: blue;
+        }
+        div.coin{
+            background-color: blueviolet;
+            background: url('img/coin.gif');
+            background-size: cover;
+        }
+        div.empty{
+
+        }
+        div.pacman{
+            background: url('img/pacman.gif');
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div id="world">
+    </div>
+
+    <script>
+        let divWorld = document.querySelector('#world');
+
+        let world = [
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        function displayMonitor(){
+            let output = '';
+
+            for(let i = 0; i < world.length; i++){
+                output += "<div class = 'row'>";
+                for(let j = 0; j < world[i].length; j++){
+                    if(world[i][j] == 1){
+                        output += "<div class = 'brick'></div>";
+                    }else if(world[i][j] == 2){
+                        output += "<div class = 'coin'></div>";
+                        
+                    }else if(world[i][j] == 0){
+                        output += "<div class = 'empty'></div>";
+                    }
+                }
+                output += "</div>";
+            }
+            divWorld.innerHTML = output;
+        }
+
+        displayMonitor();
+    </script>
+</body>
+</html>
