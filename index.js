@@ -57,7 +57,7 @@ function DisplayPacman() {
 DisplayMonitor();
 DisplayPacman();
 
-//1. Identify if its a brick
+//CHERRYY
 
 document.onkeydown = function (e) {
 
