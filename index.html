@@ -15,13 +15,19 @@
             background: black;
         }
         #world{
-            margin-top: 8px;
+            width: 300px;
+            background-color: aqua;
+            /*margin: auto;
+            margin-top: 100px;*/
+            
         }
         div.row div{
             width: 20px;
             height: 20px;
             display: inline-block;
-            margin-top: -4px !important;
+        }
+        div.row{
+            height: 20px;
         }
         div.brick{
             background-color: blue;
@@ -31,21 +37,27 @@
             background: url('img/coin.gif');
             background-size: cover;
         }
-        div.empty{
-
-        }
-        div.pacman{
+        div.empty{}
+        div#pacman{
             background: url('img/pacman.gif');
             background-size: cover;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     </style>
 </head>
 <body>
-    <div id="world">
-    </div>
+    <div id="world"></div>
+    <div id="pacman" style="top: 20px; left: 20px;"></div>
+
 
     <script>
         let divWorld = document.querySelector('#world');
+        let pacman = document.querySelector('#pacman');
+        let pacTop = 20, pacLeft = 20;
 
         let world = [
             [1,1,1,1,1,1,1,1,1,1],
@@ -60,7 +72,7 @@
             [1,1,1,1,1,1,1,1,1,1]
         ];
 
-        function displayMonitor(){
+        function DisplayMonitor(){
             let output = '';
 
             for(let i = 0; i < world.length; i++){
@@ -79,8 +91,20 @@
             }
             divWorld.innerHTML = output;
         }
+        document.onkeydown = function (e){
+            console.log(e);
+            if (e.keyCode == 38){
+                pacTop -= 20;
+                pacman.style.top = pacTop + "px";
+            }else if (e.keyCode == 40){
+                pacTop += 20;
+                pacman.style.top = pacTop + "px";
+                console.log(pacman.style.top)
+            }
+        }
 
-        displayMonitor();
+        DisplayMonitor();
+
     </script>
 </body>
 </html>
