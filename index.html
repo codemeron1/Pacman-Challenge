@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,34 +12,37 @@
             margin: 0;
             box-sizing: border-box;
         }
-        body{
+
+        body {
             background: black;
         }
-        #world{
-            width: 300px;
-            background-color: aqua;
-            /*margin: auto;
-            margin-top: 100px;*/
-            
-        }
-        div.row div{
+
+        div.row div {
             width: 20px;
             height: 20px;
             display: inline-block;
         }
-        div.row{
+
+        div.row {
             height: 20px;
         }
-        div.brick{
-            background-color: blue;
+
+        div.brick {
+            /*background-color: rgb(0, 0, 0);
+            border: 1px solid rgb(4, 122, 93);*/
+            background: url('img/wall.png');
+            background-size: cover;
         }
-        div.coin{
+
+        div.coin {
             background-color: blueviolet;
             background: url('img/coin.gif');
             background-size: cover;
         }
-        div.empty{}
-        div#pacman{
+
+        div.empty {}
+
+        div#pacman {
             background: url('img/pacman.gif');
             background-size: cover;
             width: 20px;
@@ -47,43 +51,65 @@
             top: 0;
             left: 0;
         }
+
+        div#score {
+            border: 1px solid white;
+            width: 50px;
+            text-align: center;
+            color: white;
+            padding: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div id="world"></div>
-    <div id="pacman" style="top: 20px; left: 20px;"></div>
+    <div id="pacman" style="top: 0px; left: 0px;"></div>
+    <div id="score"><span>100</span></div>
 
 
     <script>
         let divWorld = document.querySelector('#world');
-        let pacman = document.querySelector('#pacman');
-        let pacTop = 20, pacLeft = 20;
+        let divPacman = document.querySelector('#pacman');
+        let divScore = document.querySelector('#score');
 
+        let score = 0;
+        let pacman = {
+            x: 1,
+            y: 1
+        }
+
+        //15 x 30
         let world = [
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,2,2,2,2,2,2,2,2,1],
-            [1,1,1,1,1,1,1,1,1,1]
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
 
-        function DisplayMonitor(){
+        function DisplayMonitor() {
             let output = '';
 
-            for(let i = 0; i < world.length; i++){
+            for (let i = 0; i < world.length; i++) {
                 output += "<div class = 'row'>";
-                for(let j = 0; j < world[i].length; j++){
-                    if(world[i][j] == 1){
+                for (let j = 0; j < world[i].length; j++) {
+                    if (world[i][j] == 1) {
                         output += "<div class = 'brick'></div>";
-                    }else if(world[i][j] == 2){
+                    } else if (world[i][j] == 2) {
                         output += "<div class = 'coin'></div>";
-                        
-                    }else if(world[i][j] == 0){
+
+                    } else if (world[i][j] == 0) {
                         output += "<div class = 'empty'></div>";
                     }
                 }
@@ -91,20 +117,56 @@
             }
             divWorld.innerHTML = output;
         }
-        document.onkeydown = function (e){
-            console.log(e);
-            if (e.keyCode == 38){
-                pacTop -= 20;
-                pacman.style.top = pacTop + "px";
-            }else if (e.keyCode == 40){
-                pacTop += 20;
-                pacman.style.top = pacTop + "px";
-                console.log(pacman.style.top)
-            }
+        function DisplayPacman() {
+            divPacman.style.top = pacman.y * 20 + "px";
+            divPacman.style.left = pacman.x * 20 + "px";
+            divScore.innerHTML = score;
+            console.log(pacman.y)
+            console.log(pacman.x)
         }
 
         DisplayMonitor();
+        DisplayPacman();
 
+        //1. Identify if its a brick
+
+        document.onkeydown = function (e) {
+
+            if (e.keyCode == 38) { //TOP
+                if (world[pacman.y - 1][pacman.x] == 1){
+                    console.log("wall");
+                }else{
+                    pacman.y--;
+                } 
+            } else if (e.keyCode == 40) { //BOTTOM
+                if (world[pacman.y + 1][pacman.x] == 1){
+                    console.log("wall");
+                }else{
+                    pacman.y++;
+                }
+            } else if (e.keyCode == 37) { //LEFT
+                if (world[pacman.y][pacman.x - 1] == 1){
+                    console.log("wall");
+                }else{
+                    pacman.x--;
+                }
+            } else if (e.keyCode == 39) { //RIGHT
+                if (world[pacman.y][pacman.x + 1] == 1){
+                    console.log("wall");
+                }else{
+                    pacman.x++;
+                }
+            }
+
+            if (world[pacman.y][pacman.x] == 2) {
+                world[pacman.y][pacman.x] = 0;
+                score += 10;
+                DisplayMonitor();
+            }
+
+            DisplayPacman();
+        }
     </script>
 </body>
+
 </html>
