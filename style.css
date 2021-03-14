@@ -39,13 +39,25 @@ div#pacman {
     width: 20px;
     height: 20px;
     position: absolute;
+    transform: rotate(90deg);
 }
+.pacmanUp{
+    transform: rotate(270deg);
+}
+.pacmanDown{
+    transform: rotate(90deg);
+}
+.pacmanLeft{
+    transform: rotate(180deg);
+}
+.pacmanRight{
+    transform: rotate(0deg);
+}
+
+
 div.cherry {
     background: url('img/cherry.png');
     background-size: cover;
-    width: 20px;
-    height: 20px;
-    position: absolute;
 }
 
 div#score {
