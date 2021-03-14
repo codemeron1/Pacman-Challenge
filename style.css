@@ -58,6 +58,11 @@ div#pacman {
 div.cherry {
     background: url('img/cherry.png');
     background-size: cover;
+    
+}
+div.ghost {
+    background-size: cover;
+    position: absolute;
 }
 
 div#score {
